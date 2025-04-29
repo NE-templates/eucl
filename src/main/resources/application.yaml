@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: eucl
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 500MB
+      max-request-size: 500MB
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/spring_db
+    username: postgres
+    password: remy1234
+
+
+
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+
+jwt:
+  secretKey: "${JWT_SECRET_KEY}"
+
+
+
+
+server:
+  port: 8844
+
+uploads:
+  extensions: pdf,png,jpeg,jpg
+  directory: { user_profiles: /opt/ne-springboot/uploads/user_profiles, docs: /opt/ne-springboot/uploads/docs }
+
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
+  api-docs:
+    path: /api-docs
