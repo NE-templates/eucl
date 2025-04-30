@@ -11,10 +11,9 @@ import com.trex.eucl.services.IPurchaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -59,22 +58,83 @@ public class PurchaseTokenService implements IPurchaseService {
 
 
     @Override
-    public PurchaseToken getPurchasedToken(UUID tokenId) {
-        return null;
+    public PurchasedToken getPurchasedToken(UUID purchaseId) {
+        Optional<PurchasedToken> purchasedToken = purchasedTokensRepo.findById(purchaseId);
+
+        if(purchasedToken.isEmpty()) throw new BadRequestException(String.format("The purchase with id %s doesn't exist", purchaseId));
+
+        return purchasedToken.get();
     }
 
     @Override
-    public PurchaseToken getPurchasedTokenByToken(String token) {
-        return null;
+    public PurchasedToken getPurchasedTokenByToken(String token) {
+        Optional<PurchasedToken> purchasedToken = purchasedTokensRepo.findByToken(token);
+
+        if(purchasedToken.isEmpty()) throw new BadRequestException(String.format("This token %s doesn't exist", token));
+
+        return purchasedToken.get();
     }
 
     @Override
-    public List<PurchaseToken> getPurchasedTokensByMeter(String meterNumber) {
-        return null;
+    public List<PurchasedToken> getPurchasedTokensByMeter(String meterNumber) {
+
+        meterRepository.findByMeterNumber(meterNumber)
+                .orElseThrow(() -> new BadRequestException(
+                        String.format("Meter with %s number doesn't exist", meterNumber)));
+
+        Optional<List<PurchasedToken>> purchasedToken = purchasedTokensRepo.findAllByMeter_MeterNumber(meterNumber);
+
+        return purchasedToken.orElseGet(ArrayList::new);
+
     }
 
     @Override
-    public List<PurchaseToken> getAllPurchasedTokens() {
-        return null;
+    public List<PurchasedToken> getAllPurchasedTokens() {
+        return purchasedTokensRepo.findAll();
     }
+
+    @Override
+    public String useTokenPerDay(String token) {
+        PurchasedToken purchasedToken = purchasedTokensRepo.findByToken(token)
+                .orElseThrow(() -> new BadRequestException(
+                        String.format("The purchase corresponding to this token %s doesn't exist", token)));
+
+        if (purchasedToken.getTokenStatus() == TokenStatus.EXPIRED) {
+            throw new BadRequestException(String.format("Token %s is expired! Buy another one.", token));
+        }
+
+        int remainingDays = purchasedToken.getTokenValueDays();
+
+        if (remainingDays <= 0) {
+            purchasedToken = PurchasedToken.builder()
+                    .id(purchasedToken.getId())
+                    .meter(purchasedToken.getMeter())
+                    .token(purchasedToken.getToken())
+                    .tokenStatus(TokenStatus.EXPIRED)
+                    .tokenValueDays(0)
+                    .purchaseDate(purchasedToken.getPurchaseDate())
+                    .amount(purchasedToken.getAmount())
+                    .build();
+            purchasedTokensRepo.save(purchasedToken);
+            throw new BadRequestException(String.format("Token %s has no remaining days and is now expired", token));
+        }
+
+        int newRemainingDays = remainingDays - 1;
+        TokenStatus newStatus = (newRemainingDays == 0) ? TokenStatus.EXPIRED : TokenStatus.USED;
+
+        purchasedToken = PurchasedToken.builder()
+                .id(purchasedToken.getId())
+                .meter(purchasedToken.getMeter())
+                .token(purchasedToken.getToken())
+                .tokenStatus(newStatus)
+                .tokenValueDays(newRemainingDays)
+                .purchaseDate(purchasedToken.getPurchaseDate())
+                .amount(purchasedToken.getAmount())
+                .build();
+
+        purchasedTokensRepo.save(purchasedToken);
+
+        return String.format("Token %s used for one day. Remaining days: %d", token, newRemainingDays);
+    }
+
 }

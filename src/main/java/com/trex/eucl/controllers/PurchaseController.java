@@ -8,10 +8,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/purchase")
@@ -26,4 +26,33 @@ public class PurchaseController {
         return new ApiResponse<>("Token purchased successfully", HttpStatus.CREATED, purchasedToken).toResponseEntity();
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<ApiResponse<List<PurchasedToken>>> purchaseToken() {
+        List<PurchasedToken> purchasedTokens = purchaseTokenService.getAllPurchasedTokens();
+        return new ApiResponse<>("All purchases retrieved successfully", HttpStatus.OK, purchasedTokens).toResponseEntity();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<PurchasedToken>> getPurchasedToken(@PathVariable UUID id) {
+        PurchasedToken purchasedToken = purchaseTokenService.getPurchasedToken(id);
+        return new ApiResponse<>("Purchase retrieved successfully", HttpStatus.OK, purchasedToken).toResponseEntity();
+    }
+
+    @GetMapping("/get-by-token/{token}")
+    public ResponseEntity<ApiResponse<PurchasedToken>> getPurchasedTokenByToken(@PathVariable String token) {
+        PurchasedToken purchasedToken = purchaseTokenService.getPurchasedTokenByToken(token);
+        return new ApiResponse<>("Purchase retrieved successfully", HttpStatus.OK, purchasedToken).toResponseEntity();
+    }
+
+    @GetMapping("/all/{meterNumber}")
+    public ResponseEntity<ApiResponse<List<PurchasedToken>>> getPurchasedTokensByMeter(@PathVariable String meterNumber) {
+        List<PurchasedToken> purchasedTokens = purchaseTokenService.getPurchasedTokensByMeter(meterNumber);
+        return new ApiResponse<>("Meter purchases retrieved successfully", HttpStatus.OK, purchasedTokens).toResponseEntity();
+    }
+
+    @PatchMapping("/use/{token}")
+    public ResponseEntity<ApiResponse<String>> useTokenPerDay(@PathVariable String token) {
+        String usageMessage = purchaseTokenService.useTokenPerDay(token);
+        return new ApiResponse<>("Token used", HttpStatus.OK, usageMessage).toResponseEntity();
+    }
 }

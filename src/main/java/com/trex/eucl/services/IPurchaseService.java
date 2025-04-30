@@ -10,9 +10,11 @@ public interface IPurchaseService {
 
     PurchasedToken purchaseToken(PurchaseToken purchaseToken);
 
-    PurchaseToken getPurchasedToken(UUID tokenId);
-    PurchaseToken getPurchasedTokenByToken(String token);
-    List<PurchaseToken> getPurchasedTokensByMeter(String meterNumber);
-    List<PurchaseToken> getAllPurchasedTokens();
+    PurchasedToken getPurchasedToken(UUID tokenId);
+    PurchasedToken getPurchasedTokenByToken(String token);
+    List<PurchasedToken> getPurchasedTokensByMeter(String meterNumber);
+    List<PurchasedToken> getAllPurchasedTokens();
+
+    String useTokenPerDay(String token);
 
 }
