@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -37,7 +37,7 @@ public class PurchasedToken {
     private Integer tokenValueDays;
 
     @Column(name = "purchase_date", nullable = false)
-    private LocalDateTime purchaseDate;
+    private CreationTimestamp purchaseDate;
 
     @Column(nullable = false, length = 11)
     private Integer amount;
