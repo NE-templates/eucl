@@ -54,6 +54,7 @@ public class AuthServiceImpl implements IAuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", userDetails.getUsername());
+        claims.put("role", userDetails.getAuthorities());
         String token = jwtService.generateToken(claims, userDetails);
 
         return new AuthResponse(token, user);

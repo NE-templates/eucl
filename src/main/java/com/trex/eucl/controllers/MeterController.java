@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class MeterController {
     private final MeterServiceImpl meterService;
 
     @Operation(summary = "Register meter", description = "Registers a new meter")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/register")
     public ResponseEntity<APIResponse<Meter>> registerMeter(@Valid @RequestBody MeterRequest meterRequest) {
         Meter registerMeter = meterService.registerMeter(meterRequest);

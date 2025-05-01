@@ -63,14 +63,12 @@ public class JwtService {
     }
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
 
-        String token = Jwts.builder()
+        return Jwts.builder()
                 .setClaims(extraClaims).setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 2 * 24 * 60 * 60 * 1000))  //2-days expiration
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
-
-        return token;
     }
 
     public void invalidateToken(String token) {
