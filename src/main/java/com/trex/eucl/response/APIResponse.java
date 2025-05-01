@@ -1,4 +1,4 @@
-package com.trex.eucl.utils;
+package com.trex.eucl.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
@@ -11,19 +11,19 @@ import org.springframework.http.ResponseEntity;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ApiResponse <T>{
+public class APIResponse<T>{
 
     String message;
     HttpStatus status;
     T data;
 
-    public  ApiResponse(String message, HttpStatus status, T data) {
+    public APIResponse(String message, HttpStatus status, T data) {
         this.message = message;
         this.status = status;
         this.data = data;
     }
 
-    public ResponseEntity<ApiResponse<T>> toResponseEntity(){
+    public ResponseEntity<APIResponse<T>> toResponseEntity(){
         assert  status != null;
         return ResponseEntity.status(status).body(this);
     }
