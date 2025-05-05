@@ -38,13 +38,3 @@ server:
 uploads:
   extensions: pdf,png,jpeg,jpg
   directory: { user_profiles: /opt/ne-springboot/uploads/user_profiles, docs: /opt/ne-springboot/uploads/docs }
-
-
-#springdoc:
-#  swagger-ui:
-#    path: /swagger-ui.html
-#    disable-swagger-default-url: true
-#    config-url: /v3/api-docs/swagger-config
-#    url: /v3/api-docs
-#  api-docs:
-#    path: /v3/api-docs

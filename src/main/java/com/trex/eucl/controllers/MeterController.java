@@ -5,6 +5,7 @@ import com.trex.eucl.request.MeterRequest;
 import com.trex.eucl.services.impl.MeterServiceImpl;
 import com.trex.eucl.response.APIResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class MeterController {
 
     @Operation(summary = "Register meter", description = "Registers a new meter")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/register")
     public ResponseEntity<APIResponse<Meter>> registerMeter(@Valid @RequestBody MeterRequest meterRequest) {
         Meter registerMeter = meterService.registerMeter(meterRequest);
@@ -33,6 +35,7 @@ public class MeterController {
     }
 
     @Operation(summary = "Get meter by ID", description = "Fetches a meter using UUID")
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/{id}")
     public  ResponseEntity<APIResponse<Meter>> getMeter(@PathVariable UUID id) {
         Meter meter = meterService.getMeter(id);
@@ -40,6 +43,7 @@ public class MeterController {
     }
 
     @Operation(summary = "Get meter by number", description = "Fetches a meter using its number")
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/number/{meterNumber}")
     public ResponseEntity<APIResponse<Meter>> getMeterByNumber(@PathVariable String meterNumber) {
         Meter meter = meterService.getMeterByNumber(meterNumber);
@@ -47,6 +51,7 @@ public class MeterController {
     }
 
     @Operation(summary = "Get all meters", description = "Fetches all registered meters")
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/all")
     public ResponseEntity<APIResponse<List<Meter>>> getMeterByNumber() {
         List<Meter> meters = meterService.getAllMeters();

@@ -1,6 +1,5 @@
 package com.trex.eucl.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.trex.eucl.enums.Roles;
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,6 +13,7 @@ import java.util.UUID;
 
 @Entity
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")

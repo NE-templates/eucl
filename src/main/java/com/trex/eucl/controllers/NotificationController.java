@@ -3,6 +3,7 @@ package com.trex.eucl.controllers;
 import com.trex.eucl.services.impl.NotificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ public class NotificationController {
             responseCode = "200",
             description = "Notifications processed and emails sent successfully"
     )
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/send-expiry-warnings")
     public ResponseEntity<String> sendTokenExpiryNotifications() {
         notificationService.generateExpiryNotifications();
