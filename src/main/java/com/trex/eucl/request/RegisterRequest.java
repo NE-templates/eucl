@@ -3,6 +3,7 @@ package com.trex.eucl.request;
 import com.trex.eucl.enums.Roles;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,7 +36,7 @@ public class RegisterRequest {
         @Pattern(regexp = "[0-9]{16}", message = "Your National ID number must be 16 number digits")
         private String nationalId;
 
-        @NotBlank
+        @NotNull(message = "Role must not be null")
         private Roles role;
 
 }

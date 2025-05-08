@@ -13,4 +13,6 @@ public interface IMeterService {
     Meter getMeterByNumber(String meterNumber);
     List<Meter> getAllMeters();
 
+    List<Meter> getUserMeters(UUID id);
+
 }

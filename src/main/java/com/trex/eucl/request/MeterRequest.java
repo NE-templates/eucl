@@ -2,6 +2,7 @@ package com.trex.eucl.request;
 
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class MeterRequest {
     @NotBlank
     String meterNumber;
 
-    @NotBlank
+    @NotNull(message = "Id must not be null")
     UUID userId;
 
 }

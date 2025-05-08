@@ -65,4 +65,9 @@ public class MeterServiceImpl implements IMeterService {
     public List<Meter> getAllMeters() {
         return meterRepository.findAll();
     }
+
+    @Override
+    public List<Meter> getUserMeters(UUID id) {
+        return meterRepository.findAllByOwner_Id(id);
+    }
 }
