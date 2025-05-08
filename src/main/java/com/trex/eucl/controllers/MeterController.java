@@ -58,4 +58,12 @@ public class MeterController {
         return new APIResponse<>("All meters retrieved successfully", HttpStatus.OK, meters).toResponseEntity();
     }
 
+    @Operation(summary = "Get user meters", description = "Fetches all user registered meters")
+    @SecurityRequirement(name = "bearerAuth")
+    @GetMapping("/user/{id}")
+    public ResponseEntity<APIResponse<List<Meter>>> getMetersByUser(@PathVariable UUID id) {
+        List<Meter> userMeters = meterService.getUserMeters(id);
+        return new APIResponse<>("User meters retrieved successfully", HttpStatus.OK, userMeters).toResponseEntity();
+    }
+
 }
